@@ -37,6 +37,7 @@ import { ExerciseUpdate } from './telegram.controller';
           webhook: {
             domain: configService.get('IP') as string,
             path: '/bot',
+            // d
           },
         },
       }),

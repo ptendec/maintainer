@@ -13,9 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Pull latest changes
-        run: git pull
-
       - name: Install dependencies
         run: yarn install
 
@@ -23,4 +20,4 @@ jobs:
         run: yarn global add pm2
 
       - name: Start application with PM2
-        run: pm2 start yarn --name "maintainer-bot" -- start:prod
+        run: pm2 restart yarn --name "maintainer-bot" -- start:prod
