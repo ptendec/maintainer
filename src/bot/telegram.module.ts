@@ -36,7 +36,7 @@ import { ExerciseUpdate } from './telegram.controller';
         middlewares: [session()],
         launchOptions: {
           webhook: {
-            domain: 'https://caad-2-73-43-111.ngrok-free.app',
+            domain: configService.get('IP') as string,
             path: '/bot',
           },
         },
