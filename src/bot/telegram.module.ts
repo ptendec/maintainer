@@ -30,17 +30,22 @@ import { ExerciseUpdate } from './telegram.controller';
     ScheduleModule.forRoot(),
     TelegrafModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        token: configService.get('API_KEY') as string,
-        middlewares: [session()],
-        launchOptions: {
-          webhook: {
-            domain: configService.get('IP') as string,
-            path: '/bot',
-            // d
+      useFactory: (configService: ConfigService) => {
+        console.log(configService.get('API_KEY') as string);
+        console.log(configService.get('IP') as string);
+        console.log(process.env.API_KEY);
+        console.log(process.env.IP);
+        return {
+          token: configService.get('API_KEY') as string,
+          middlewares: [session()],
+          launchOptions: {
+            webhook: {
+              domain: configService.get('IP') as string,
+              path: '/bot',
+            },
           },
-        },
-      }),
+        };
+      },
       inject: [ConfigService],
     }),
   ],
