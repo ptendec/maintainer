@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Check secret length
-        run: echo "The secret length is ${{ secrets.SSH_HOST }} ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.WORK_DIR }} ${{ secrets.SSH_USER }}"
+        run: echo "The secret length is ${#SSH_HOST} ${#SSH_PRIVATE_KEY} ${#WORK_DIR} ${#SSH_USER}"
 
       - name: install ssh keys
         # check this thread to understand why its needed:
