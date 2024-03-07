@@ -9,7 +9,6 @@ import {
   DoExercise,
   ViewVideosScene,
 } from 'src/controllers/exercises/do.controller';
-import { ReminderService } from 'src/reminder/reminder.service';
 import { session } from 'telegraf';
 import {
   AddBodyPartScene,
@@ -41,7 +40,7 @@ import { ExerciseUpdate } from './telegram.controller';
           },
         },
       }),
-      inject: [ConfigService, ReminderService],
+      inject: [ConfigService],
     }),
   ],
   providers: [

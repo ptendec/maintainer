@@ -13,9 +13,8 @@ export class ReminderService {
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async remindDaily() {
     const now = new Date();
-    let dayOfWeek = now.getDay(); // 0 - Sunday, 1 - Monday, ..., 6 - Saturday
+    let dayOfWeek = now.getDay();
 
-    // Adjust dayOfWeek to consider Monday as the first day of the week
     dayOfWeek = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
 
     try {
