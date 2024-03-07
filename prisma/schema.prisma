@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ExerciseType {
+  id        Int        @id @default(autoincrement())
+  name      String
+  bodyParts BodyPart[]
+}
+
+model BodyPart {
+  id             Int          @id @default(autoincrement())
+  name           String
+  link           String?
+  exerciseTypeId Int
+  exerciseType   ExerciseType @relation(fields: [exerciseTypeId], references: [id])
+  videos         Video[]
+}
+
+model Video {
+  id         Int      @id @default(autoincrement())
+  link       String
+  bodyPartId Int
+  bodyPart   BodyPart @relation(fields: [bodyPartId], references: [id])
+}
+
+model Diet {
+  id     Int    @id @default(autoincrement())
+  name   String
+  dishes Dish[]
+}
+
+model Dish {
+  id            Int       @id @default(autoincrement())
+  name          String?
+  recipe        String?
+  proteins      Float?
+  carbohydrates Float?
+  fats          Float?
+  calories      Float?
+  dietId        Int
+  diet          Diet      @relation(fields: [dietId], references: [id])
+  schedule      Schedule?
+}
+
+model Schedule {
+  id       Int     @id @default(autoincrement())
+  week     Int?
+  datetime String?
+  dishId   Int     @unique
+  dish     Dish    @relation(fields: [dishId], references: [id], onDelete: Cascade)
+}
