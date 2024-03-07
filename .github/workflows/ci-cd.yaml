@@ -15,13 +15,6 @@ jobs:
       SSH_USER: ${{ secrets.SSH_USER }}
 
     steps:
-      - name: Check secret length
-        run: |
-          echo "SSH_HOST length is ${#SSH_HOST}"
-          echo "SSH_PRIVATE_KEY length is ${#SSH_PRIVATE_KEY}"
-          echo "WORK_DIR length is ${#WORK_DIR}"
-          echo "SSH_USER length is ${#SSH_USER}"
-
       - name: install ssh keys
         run: |
           mkdir -p ~/.ssh
@@ -30,7 +23,10 @@ jobs:
           ssh-keyscan -H $SSH_HOST > ~/.ssh/known_hosts
 
       - name: connect and pull
-        run: ssh -vvv $SSH_USER@$SSH_HOST "cd $WORK_DIR && git pull"
+        run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && git pull"
+
+      - name: Reload PM2 process
+        run: ssh $SSH_USER@$SSH_HOST "pm2 reload maintainer-bot"
 
       - name: cleanup
         run: rm -rf ~/.ssh
