@@ -34,10 +34,10 @@ jobs:
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && git pull"
 
       - name: Build the project
-        run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && yarn nest build"
+        run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && yarn build"
 
       - name: Reload PM2 process
-        run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && pm2 reload ecosystem.config.js"
+        run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && yarn start:prod"
 
       - name: Cleanup
         run: rm -rf ~/.ssh
