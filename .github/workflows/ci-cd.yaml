@@ -23,9 +23,6 @@ jobs:
       #   with:
       #     node-version: '14'
 
-      - name: Build the project
-        run: nest build
-
       - name: Install ssh keys
         run: |
           mkdir -p ~/.ssh
@@ -35,6 +32,9 @@ jobs:
 
       - name: Connect and pull
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && git pull"
+
+      - name: Build the project
+        run: nest build
 
       - name: Reload PM2 process
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && pm2 reload ecosystem.config.js"
