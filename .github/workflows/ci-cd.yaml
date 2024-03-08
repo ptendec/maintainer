@@ -28,6 +28,9 @@ jobs:
       - name: Connect and pull
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && git pull"
 
+      - name: installing packages
+        run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && yarn"
+
       - name: Build the project
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && yarn build"
 
