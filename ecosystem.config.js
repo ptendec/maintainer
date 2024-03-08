@@ -2,7 +2,9 @@ module.exports = {
   apps: [
     {
       name: 'maintainer-bot',
-      script: 'dist/main.js',
+      script: 'yarn',
+      args: 'start:prod',
+      autorestart: true,
     },
   ],
 };
