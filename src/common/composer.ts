@@ -111,7 +111,7 @@ export class ComposerCommon {
   async start(@Ctx() ctx: SceneContext<Context>) {
     ctx.scene.leave();
     await ctx.reply(
-      'Привет! Что вы хотите сделать?',
+      'Салам епта!!!',
       Markup.keyboard([ACTIONS.EXERCISES]).resize(),
     );
   }
