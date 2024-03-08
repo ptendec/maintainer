@@ -15,18 +15,32 @@ jobs:
       SSH_USER: ${{ secrets.SSH_USER }}
 
     steps:
-      - name: install ssh keys
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: nest build
+
+      - name: Install ssh keys
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $SSH_HOST > ~/.ssh/known_hosts
 
-      - name: connect and pull
+      - name: Connect and pull
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && git pull"
 
       - name: Reload PM2 process
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && pm2 reload ecosystem.config.js"
 
-      - name: cleanup
+      - name: Cleanup
         run: rm -rf ~/.ssh
