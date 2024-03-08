@@ -34,7 +34,7 @@ jobs:
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && git pull"
 
       - name: Build the project
-        run: nest build
+        run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && yarn nest build"
 
       - name: Reload PM2 process
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && pm2 reload ecosystem.config.js"
