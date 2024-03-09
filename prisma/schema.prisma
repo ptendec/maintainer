@@ -55,3 +55,37 @@ model Schedule {
   dishId   Int     @unique
   dish     Dish    @relation(fields: [dishId], references: [id], onDelete: Cascade)
 }
+
+model Program {
+  id   Int    @id @default(autoincrement())
+  name String
+  days Day[]
+}
+
+model Day {
+  id        Int     @id @default(autoincrement())
+  name      String
+  programId Int
+  program   Program @relation(fields: [programId], references: [id])
+  stages    Stage[]
+}
+
+model Stage {
+  id        Int        @id @default(autoincrement())
+  name      String
+  dayId     Int
+  day       Day        @relation(fields: [dayId], references: [id])
+  exercises Exercise[]
+}
+
+model Exercise {
+  id      Int     @id @default(autoincrement())
+  name    String
+  remark  String?
+  warning String?
+  video   String?
+  sets    Int?
+  repeats Int?
+  stageId Int
+  stage   Stage   @relation(fields: [stageId], references: [id])
+}
