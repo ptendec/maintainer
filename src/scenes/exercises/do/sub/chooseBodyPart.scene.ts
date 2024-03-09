@@ -3,16 +3,13 @@ import { DO } from 'src/config/steps';
 import { ExercisesSceneContext } from 'src/config/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Markup } from 'telegraf';
-import { SceneContext } from 'telegraf/typings/scenes';
 
 @Scene(DO.CHOOSE_BODY_PART)
 export class DoChooseBodyPartScene {
   constructor(private readonly prisma: PrismaService) {}
 
   @SceneEnter()
-  async onSceneEnter(
-    @Ctx() ctx: SceneContext & { session: { exerciseTypeId: number } },
-  ) {
+  async onSceneEnter(@Ctx() ctx: ExercisesSceneContext) {
     const bodyParts = await this.prisma.bodyPart.findMany({
       where: { exerciseTypeId: ctx.session.exerciseTypeId },
     });
