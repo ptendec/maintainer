@@ -7,14 +7,14 @@ import { CreatebodyPartscene } from 'src/scenes/exercises/create/sub/addExercise
 import { AddVideoScene } from 'src/scenes/exercises/create/sub/addVideo.scene';
 import { AddChooseBodyPartScene } from 'src/scenes/exercises/create/sub/chooseBodyPart.scene';
 import { ChooseExerciseTypeScene } from 'src/scenes/exercises/create/sub/choseExerciseType.scene';
-import { DoExercise } from 'src/scenes/exercises/do/do.scene';
+import { DoExercise } from 'src/scenes/exercises/do/index.scene';
 import { DoChooseBodyPartScene } from 'src/scenes/exercises/do/sub/chooseBodyPart.scene';
 import { DoChooseExerciseTypeScene } from 'src/scenes/exercises/do/sub/chooseExerciseType.scene';
 import { ViewVideosScene } from 'src/scenes/exercises/do/sub/viewVideos.scene';
 import { ComposerCommon } from 'src/telegram/composer';
 import { session } from 'telegraf';
 import { PrismaModule } from '../prisma/prisma.module';
-import { AddExerciseScene } from '../scenes/exercises/create/create.scene';
+import { AddExerciseScene } from '../scenes/exercises/create/index.scene';
 import { ExerciseUpdate } from './telegram.controller';
 
 @Module({

@@ -1,6 +1,5 @@
 import { Ctx, Hears, Update } from 'nestjs-telegraf';
-import { ACTIONS } from 'src/config/actions';
-import { EXERCISES } from 'src/config/steps';
+import { ACTIONS, EXERCISES } from 'src/config/actions';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Context, Markup } from 'telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';

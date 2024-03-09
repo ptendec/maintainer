@@ -1,5 +1,6 @@
 import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
-import { ADD, EXERCISES } from 'src/config/steps';
+import { EXERCISES } from 'src/config/actions';
+import { ADD } from 'src/config/steps';
 import { SceneContext } from 'telegraf/typings/scenes';
 
 @Scene(EXERCISES.ADD)

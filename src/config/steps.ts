@@ -1,8 +1,3 @@
-export enum EXERCISES {
-  ADD = 'Добавить комплекс',
-  DO = 'Заняться',
-}
-
 export enum ADD {
   CHOOSE_EXERCISE_TYPE = 'Выбрать категорию упражнения',
   ADD_EXERCISE_TYPE = 'Добавить еще одну категорию',
