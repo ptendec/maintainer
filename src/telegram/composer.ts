@@ -1,7 +1,7 @@
 import { Composer, Ctx, Hears, Start } from 'nestjs-telegraf';
-import { ACTIONS } from 'src/config/steps';
+import { ACTIONS } from 'src/config/actions';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Context, Markup } from 'telegraf';
+import { Markup } from 'telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 
 interface Dish {
@@ -108,16 +108,13 @@ export class ComposerCommon {
   constructor(private readonly prisma: PrismaService) {}
 
   @Start()
-  async start(@Ctx() ctx: SceneContext<Context>) {
+  async start(@Ctx() ctx: SceneContext) {
     ctx.scene.leave();
-    await ctx.reply(
-      'Привет! Я бот для помощи в тренировках и питании',
-      Markup.keyboard([ACTIONS.EXERCISES]).resize(),
-    );
+    await ctx.reply('Выбирайте', Markup.keyboard([ACTIONS.EXERCISES]).resize());
   }
 
   @Hears('Добавить')
-  async add(@Ctx() ctx: SceneContext<Context>) {
+  async add(@Ctx() ctx: SceneContext) {
     try {
       const createdDiet = await this.prisma.diet.create({
         data: {
@@ -151,7 +148,7 @@ export class ComposerCommon {
   }
 
   @Hears('Показать')
-  async showDiet(@Ctx() ctx: SceneContext<Context>) {
+  async showDiet(@Ctx() ctx: SceneContext) {
     try {
       const diets = await this.prisma.diet.findMany({
         include: {

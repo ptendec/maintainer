@@ -2,23 +2,19 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TelegrafModule } from 'nestjs-telegraf';
-import { ComposerCommon } from 'src/common/composer';
-import {
-  DoChooseBodyPartScene,
-  DoChooseExerciseTypeScene,
-  DoExercise,
-  ViewVideosScene,
-} from 'src/controllers/exercises/do.controller';
+import { AddBodyPartScene } from 'src/scenes/exercises/create/sub/addBodyPart.scene';
+import { CreatebodyPartscene } from 'src/scenes/exercises/create/sub/addExerciseType.scene';
+import { AddVideoScene } from 'src/scenes/exercises/create/sub/addVideo.scene';
+import { AddChooseBodyPartScene } from 'src/scenes/exercises/create/sub/chooseBodyPart.scene';
+import { ChooseExerciseTypeScene } from 'src/scenes/exercises/create/sub/choseExerciseType.scene';
+import { DoExercise } from 'src/scenes/exercises/do/do.scene';
+import { DoChooseBodyPartScene } from 'src/scenes/exercises/do/sub/chooseBodyPart.scene';
+import { DoChooseExerciseTypeScene } from 'src/scenes/exercises/do/sub/chooseExerciseType.scene';
+import { ViewVideosScene } from 'src/scenes/exercises/do/sub/viewVideos.scene';
+import { ComposerCommon } from 'src/telegram/composer';
 import { session } from 'telegraf';
-import {
-  AddBodyPartScene,
-  AddChooseBodyPartScene,
-  AddExerciseScene,
-  AddVideoScene,
-  ChooseExerciseTypeScene,
-  CreatebodyPartscene,
-} from '../controllers/exercises/create.controller';
 import { PrismaModule } from '../prisma/prisma.module';
+import { AddExerciseScene } from '../scenes/exercises/create/create.scene';
 import { ExerciseUpdate } from './telegram.controller';
 
 @Module({

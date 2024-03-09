@@ -1,13 +1,9 @@
 import { Ctx, Hears, Update } from 'nestjs-telegraf';
-import { ACTIONS, EXERCISES } from 'src/config/steps';
+import { ACTIONS } from 'src/config/actions';
+import { EXERCISES } from 'src/config/steps';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Context, Markup } from 'telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
-
-export interface Session {
-  exerciseTypeId: number;
-  bodyPartId: number;
-}
 
 @Update()
 export class ExerciseUpdate {
@@ -27,12 +23,12 @@ export class ExerciseUpdate {
   }
 
   @Hears(EXERCISES.ADD)
-  async addbodyPartsceneEnter(@Ctx() ctx: SceneContext<Context>) {
+  async addbodyPartsceneEnter(@Ctx() ctx: SceneContext) {
     ctx.scene.enter(EXERCISES.ADD);
   }
 
   @Hears(EXERCISES.DO)
-  async startExercise(@Ctx() ctx: SceneContext<Context>) {
+  async startExercise(@Ctx() ctx: SceneContext) {
     ctx.scene.enter(EXERCISES.DO);
   }
 }

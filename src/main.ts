@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { getBotToken } from 'nestjs-telegraf';
 import { Scenes } from 'telegraf';
-import { AppModule } from './bot/telegram.module';
+import { AppModule } from './telegram/telegram.module';
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
