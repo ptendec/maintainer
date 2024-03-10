@@ -107,10 +107,19 @@ function getMenuTime(menu: string): string {
 export class ComposerCommon {
   constructor(private readonly prisma: PrismaService) {}
 
+  @Hears('Показать ссылки')
+  async showLinks(@Ctx() ctx: SceneContext) {
+    const videos = await this.prisma.video.findMany();
+    ctx.reply(videos.map((video) => video.link).join('\n'));
+  }
+
   @Start()
   async start(@Ctx() ctx: SceneContext) {
     ctx.scene.leave();
-    await ctx.reply('Выбирайте', Markup.keyboard([ACTIONS.EXERCISES]).resize());
+    await ctx.reply(
+      'Выбирайте',
+      Markup.keyboard([ACTIONS.EXERCISES, ACTIONS.GYM]).resize(),
+    );
   }
 
   @Hears('Добавить')
@@ -141,6 +150,90 @@ export class ComposerCommon {
         }
       }
       ctx.reply('Создано успешно');
+    } catch (error) {
+      console.log(error);
+      ctx.reply('Не удалось создать');
+    }
+  }
+
+  @Hears('delete')
+  async delete(@Ctx() ctx: SceneContext) {
+    try {
+      await this.prisma.exercise.deleteMany();
+      await this.prisma.stage.deleteMany();
+      await this.prisma.day.deleteMany();
+      await this.prisma.program.deleteMany();
+    } catch (error) {
+      console.log(error);
+      ctx.reply('Не удалось удалить');
+    }
+  }
+
+  @Hears('Добавить моковые тренировка')
+  async addMockGym(@Ctx() ctx: SceneContext) {
+    console.log('addMockGym');
+    try {
+      await this.prisma.program.create({
+        data: {
+          name: 'Программа тренировок',
+          days: {
+            create: [
+              {
+                name: 'День 1',
+                stages: {
+                  create: [
+                    {
+                      name: 'Этап 1',
+                      order: 1,
+                      exercises: {
+                        create: [
+                          {
+                            name: 'Приседания',
+                            order: 1,
+                            sets: 3,
+                            repeats: 10,
+                          },
+                          { name: 'Отжимания', order: 2, sets: 2, repeats: 15 },
+                        ],
+                      },
+                    },
+                    {
+                      name: 'Этап 2',
+                      order: 2,
+                      exercises: {
+                        create: [
+                          {
+                            name: 'Подтягивания',
+                            order: 1,
+                            sets: 4,
+                            repeats: 8,
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: 'День 2',
+                stages: {
+                  create: [
+                    {
+                      name: 'Этап 1',
+                      order: 1,
+                      exercises: {
+                        create: [
+                          { name: 'Бег', order: 1, sets: 1, repeats: 30 }, // предположим, что repeats - это минуты
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      });
     } catch (error) {
       console.log(error);
       ctx.reply('Не удалось создать');

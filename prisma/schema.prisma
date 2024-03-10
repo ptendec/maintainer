@@ -76,6 +76,7 @@ model Stage {
   dayId     Int
   day       Day        @relation(fields: [dayId], references: [id])
   exercises Exercise[]
+  order     Int
 }
 
 model Exercise {
@@ -87,5 +88,6 @@ model Exercise {
   sets    Int?
   repeats Int?
   stageId Int
+  order   Int
   stage   Stage   @relation(fields: [stageId], references: [id])
 }
