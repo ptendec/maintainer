@@ -115,6 +115,7 @@ export class ComposerCommon {
 
   @Start()
   async start(@Ctx() ctx: SceneContext) {
+    ctx.text;
     ctx.scene.leave();
     await ctx.reply(
       'Выбирайте',

@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id         Int     @id @default(autoincrement())
+  telegramId String  @unique
+  firstName  String
+  lastName   String?
+  username   String?
+  chatId     String?
+  Diet       Diet[]
+}
+
 model ExerciseType {
   id        Int        @id @default(autoincrement())
   name      String
@@ -33,6 +43,8 @@ model Diet {
   id     Int    @id @default(autoincrement())
   name   String
   dishes Dish[]
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model Dish {
@@ -49,11 +61,11 @@ model Dish {
 }
 
 model Schedule {
-  id       Int     @id @default(autoincrement())
-  week     Int?
-  datetime String?
-  dishId   Int     @unique
-  dish     Dish    @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  id     Int     @id @default(autoincrement())
+  week   Int?
+  time   String?
+  dishId Int     @unique
+  dish   Dish    @relation(fields: [dishId], references: [id], onDelete: Cascade)
 }
 
 model Program {

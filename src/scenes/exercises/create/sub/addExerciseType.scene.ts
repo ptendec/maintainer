@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { SceneContext } from 'telegraf/typings/scenes';
 
 @Scene(ADD.ADD_EXERCISE_TYPE)
-export class CreatebodyPartscene {
+export class AddBodyPartscene {
   constructor(private readonly prisma: PrismaService) {}
 
   @SceneEnter()
