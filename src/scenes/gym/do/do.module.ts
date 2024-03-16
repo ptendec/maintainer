@@ -7,4 +7,4 @@ import { GymStartScene } from './sub/start.scene';
 @Module({
   providers: [DoGymScene, GymStartScene, ChooseProgramScene, ChooseDayScene],
 })
-export class DoGymModule {}
+export class GymDoModule {}

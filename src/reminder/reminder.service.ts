@@ -8,11 +8,6 @@ export class ReminderService {
   constructor(private readonly prismaService: PrismaService) {}
   private readonly bot: Telegram = new Telegram(process.env.API_KEY as string);
 
-  @Cron('45 * * * * *')
-  async handleCron() {
-    console.log('Called when the current second is 45');
-  }
-
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async remindDaily() {
     const now = new Date();

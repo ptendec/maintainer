@@ -8,13 +8,12 @@ datasource db {
 }
 
 model User {
-  id         Int     @id @default(autoincrement())
-  telegramId String  @unique
-  firstName  String
-  lastName   String?
-  username   String?
-  chatId     String?
-  Diet       Diet[]
+  id        BigInt  @id @unique()
+  firstName String?
+  lastName  String?
+  username  String?
+  chatId    BigInt?
+  Diet      Diet[]
 }
 
 model ExerciseType {
@@ -43,7 +42,7 @@ model Diet {
   id     Int    @id @default(autoincrement())
   name   String
   dishes Dish[]
-  userId Int
+  userId BigInt
   user   User   @relation(fields: [userId], references: [id])
 }
 

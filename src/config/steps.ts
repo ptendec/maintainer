@@ -40,8 +40,8 @@ export enum GYM_ADD_PROGRAM_STEPS {
 }
 
 export enum GYM_ADD_STEPS {
-  ADD_DAY_GENERAL = 'Добавить день общий',
-  ADD_STAGE_GENERAL = 'Добавить этап общий',
-  ADD_EXERCISE_GENERAL = 'Добавить упражнение общий',
-  ADD_PROGRAM_GENERAL = 'Добавить программу общий',
+  ADD_DAY = 'Добавить день общий',
+  ADD_STAGE = 'Добавить этап общий',
+  ADD_EXERCISE = 'Добавить упражнение общий',
+  ADD_PROGRAM = 'Добавить программу общий',
 }

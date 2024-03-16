@@ -2,7 +2,7 @@ import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { GYM_ADD_EXERCISE_STEPS, GYM_ADD_STEPS } from 'src/config/steps';
 import { SceneContext } from 'telegraf/typings/scenes';
 
-@Scene(GYM_ADD_STEPS.ADD_EXERCISE_GENERAL)
+@Scene(GYM_ADD_STEPS.ADD_EXERCISE)
 export class AddExerciseSceneEntry {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: SceneContext) {
