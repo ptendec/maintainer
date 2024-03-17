@@ -106,7 +106,7 @@ export class AddExerciseScene {
       name: 'dayId',
       value: ctx.session.stageId,
     });
-    this.prisma.exercise
+    await this.prisma.exercise
       .create({
         data: {
           name,
