@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GymAddModule } from './add.module';
+import { GymAddModule } from './add/add.module';
 import { GymDoModule } from './do/do.module';
 
 @Module({

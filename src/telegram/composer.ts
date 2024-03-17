@@ -1,5 +1,5 @@
-import { Composer, Ctx, Hears, Start } from 'nestjs-telegraf';
-import { ACTIONS } from 'src/config/actions';
+import { Composer, Ctx, On, Start } from 'nestjs-telegraf';
+import { ACTIONS, ADD, DO } from 'src/config/actions';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Markup } from 'telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
@@ -7,11 +7,6 @@ import { SceneContext } from 'telegraf/typings/scenes';
 @Composer()
 export class ComposerCommon {
   constructor(private readonly prisma: PrismaService) {}
-
-  @Hears('wizard')
-  enterFunc(@Ctx() ctx: SceneContext) {
-    ctx.scene.enter('wizard');
-  }
 
   @Start()
   async start(@Ctx() ctx: SceneContext) {
@@ -37,9 +32,15 @@ export class ComposerCommon {
     } catch (error) {
       console.log(error);
     }
-    await ctx.reply(
-      'Выбирайте',
-      Markup.keyboard([ACTIONS.EXERCISES, ACTIONS.GYM]).resize(),
+    const actions = ACTIONS.map((action) => action.name);
+    await ctx.reply('Выбирайте', Markup.keyboard([actions]).resize());
+  }
+
+  @On('text')
+  async onText(@Ctx() ctx: SceneContext) {
+    const found = [...ACTIONS, ...ADD, ...DO].find(
+      (action) => action.name === ctx.text,
     );
+    found && ctx.scene.enter(found.id);
   }
 }

@@ -1,14 +1,37 @@
-export enum ACTIONS {
-  EXERCISES = 'Физическая активность',
-  GYM = 'Тренироваться',
+interface Action {
+  name: string;
+  id: string;
 }
 
-export enum EXERCISES {
-  ADD = 'Добавить комплекс',
-  DO = 'Заняться',
-}
+export const ACTIONS: Action[] = [
+  {
+    name: 'Добавить',
+    id: 'ADD',
+  },
+  {
+    name: 'Заняться',
+    id: 'DO',
+  },
+];
 
-export enum GYM {
-  DO = 'Тренировка',
-  ADD = 'Добавить тренировку',
-}
+export const DO: Action[] = [
+  {
+    name: 'Физическая активность',
+    id: 'DO.EXERCISES',
+  },
+  {
+    name: 'Тренироваться',
+    id: 'DO.GYM',
+  },
+];
+
+export const ADD: Action[] = [
+  {
+    name: 'Упражнения',
+    id: 'ADD.EXERCISES',
+  },
+  {
+    name: 'Тренировка',
+    id: 'ADD.GYM',
+  },
+];

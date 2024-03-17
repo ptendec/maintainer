@@ -1,4 +1,4 @@
-export enum ADD {
+export enum ADD_EXERCISE {
   CHOOSE_EXERCISE_TYPE = 'Выбрать категорию упражнения',
   ADD_EXERCISE_TYPE = 'Добавить еще одну категорию',
   CHOOSE_BODY_PART = 'Выбрать часть тела для добавления',
@@ -6,7 +6,7 @@ export enum ADD {
   ADD_VIDEO = 'Добавить видео',
 }
 
-export enum DO {
+export enum DO_EXERCISE {
   CHOOSE_EXERCISE_TYPE = 'Выбрать тип упражнений',
   CHOOSE_BODY_PART = 'Выбрать часть тела для занятия',
   VIEW_VIDEOS = 'Посмотреть видео',

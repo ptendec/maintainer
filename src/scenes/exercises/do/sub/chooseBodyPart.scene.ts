@@ -1,10 +1,10 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
-import { DO } from 'src/config/steps';
+import { DO_EXERCISE } from 'src/config/steps';
 import { ExercisesSceneContext } from 'src/config/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Markup } from 'telegraf';
 
-@Scene(DO.CHOOSE_BODY_PART)
+@Scene(DO_EXERCISE.CHOOSE_BODY_PART)
 export class DoChooseBodyPartScene {
   constructor(private readonly prisma: PrismaService) {}
 
@@ -27,6 +27,6 @@ export class DoChooseBodyPartScene {
     // @ts-expect-error match
     const bodyPartId = ctx.match[1];
     ctx.session.bodyPartId = parseInt(bodyPartId);
-    ctx.scene.enter(DO.VIEW_VIDEOS);
+    ctx.scene.enter(DO_EXERCISE.VIEW_VIDEOS);
   }
 }

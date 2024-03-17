@@ -1,10 +1,10 @@
 import { Ctx, On, Scene, SceneEnter } from 'nestjs-telegraf';
-import { ADD } from 'src/config/steps';
+import { ADD_EXERCISE } from 'src/config/steps';
 import { ExercisesSceneContext } from 'src/config/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SceneContext } from 'telegraf/typings/scenes';
 
-@Scene(ADD.ADD_BODY_PART)
+@Scene(ADD_EXERCISE.ADD_BODY_PART)
 export class AddBodyPartScene {
   constructor(private readonly prisma: PrismaService) {}
 
@@ -30,7 +30,7 @@ export class AddBodyPartScene {
         })
         .then(async (created) => {
           ctx.session.bodyPartId = created.id;
-          ctx.scene.enter(ADD.ADD_VIDEO);
+          ctx.scene.enter(ADD_EXERCISE.ADD_VIDEO);
         });
   }
 }

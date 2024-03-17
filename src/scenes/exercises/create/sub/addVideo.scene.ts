@@ -1,10 +1,10 @@
 import { Ctx, On, Scene, SceneEnter } from 'nestjs-telegraf';
-import { ADD } from 'src/config/steps';
+import { ADD_EXERCISE } from 'src/config/steps';
 import { ExercisesSceneContext } from 'src/config/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SceneContext } from 'telegraf/typings/scenes';
 
-@Scene(ADD.ADD_VIDEO)
+@Scene(ADD_EXERCISE.ADD_VIDEO)
 export class AddVideoScene {
   constructor(private readonly prisma: PrismaService) {}
 
