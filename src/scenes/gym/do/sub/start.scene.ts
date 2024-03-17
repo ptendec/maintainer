@@ -46,7 +46,30 @@ export class GymStartScene {
       const nextExercise = await this.prisma.exercise.findUnique({
         where: { id: nextExerciseId },
       });
-      ctx.reply('Следующее упражнение: ' + nextExercise?.name);
+
+      let replyMessage = 'Следующее упражнение: ' + nextExercise?.name;
+
+      if (nextExercise?.remark) {
+        replyMessage += `\nПримечание: ${nextExercise.remark}`;
+      }
+
+      if (nextExercise?.warning) {
+        replyMessage += `\nВнимание: ${nextExercise.warning}`;
+      }
+
+      if (nextExercise?.sets) {
+        replyMessage += `\nПодходы: ${nextExercise.sets}`;
+      }
+
+      if (nextExercise?.repeats) {
+        replyMessage += `\nПовторения: ${nextExercise.repeats}`;
+      }
+
+      ctx.reply(replyMessage);
+
+      if (nextExercise?.video) {
+        ctx.replyWithAnimation(nextExercise.video);
+      }
     } else {
       const currentStageIndex = ctx.session.stages.indexOf(ctx.session.stageId);
       if (currentStageIndex < ctx.session.stages.length - 1) {

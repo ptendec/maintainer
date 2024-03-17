@@ -1,4 +1,15 @@
 -- CreateTable
+CREATE TABLE "User" (
+    "id" BIGINT NOT NULL,
+    "firstName" TEXT,
+    "lastName" TEXT,
+    "username" TEXT,
+    "chatId" BIGINT,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "ExerciseType" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -29,6 +40,7 @@ CREATE TABLE "Video" (
 CREATE TABLE "Diet" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "userId" BIGINT NOT NULL,
 
     CONSTRAINT "Diet_pkey" PRIMARY KEY ("id")
 );
@@ -51,7 +63,7 @@ CREATE TABLE "Dish" (
 CREATE TABLE "Schedule" (
     "id" SERIAL NOT NULL,
     "week" INTEGER,
-    "datetime" TEXT,
+    "time" TEXT,
     "dishId" INTEGER NOT NULL,
 
     CONSTRAINT "Schedule_pkey" PRIMARY KEY ("id")
@@ -61,6 +73,7 @@ CREATE TABLE "Schedule" (
 CREATE TABLE "Program" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "userId" BIGINT,
 
     CONSTRAINT "Program_pkey" PRIMARY KEY ("id")
 );
@@ -100,6 +113,9 @@ CREATE TABLE "Exercise" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Schedule_dishId_key" ON "Schedule"("dishId");
 
 -- AddForeignKey
@@ -109,10 +125,16 @@ ALTER TABLE "BodyPart" ADD CONSTRAINT "BodyPart_exerciseTypeId_fkey" FOREIGN KEY
 ALTER TABLE "Video" ADD CONSTRAINT "Video_bodyPartId_fkey" FOREIGN KEY ("bodyPartId") REFERENCES "BodyPart"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Diet" ADD CONSTRAINT "Diet_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Dish" ADD CONSTRAINT "Dish_dietId_fkey" FOREIGN KEY ("dietId") REFERENCES "Diet"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Schedule" ADD CONSTRAINT "Schedule_dishId_fkey" FOREIGN KEY ("dishId") REFERENCES "Dish"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Program" ADD CONSTRAINT "Program_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Day" ADD CONSTRAINT "Day_programId_fkey" FOREIGN KEY ("programId") REFERENCES "Program"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
