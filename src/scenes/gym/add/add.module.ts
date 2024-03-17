@@ -11,10 +11,12 @@ import { AddStageSceneEntry } from './addStage';
 import { AddStageScene } from './addStage/sub/addStage';
 import { ChooseDayForStageScene } from './addStage/sub/chooseDay';
 import { ChooseProgramForStageScene } from './addStage/sub/chooseProgram';
+import { AddGym } from './index.scene';
 
 @Module({
   imports: [UtilityModule],
   providers: [
+    AddGym,
     AddProgramScene,
 
     AddDayScene,
@@ -31,6 +33,8 @@ import { ChooseProgramForStageScene } from './addStage/sub/chooseProgram';
     ChooseProgramForExerciseScene,
   ],
   exports: [
+    AddGym,
+
     AddProgramScene,
 
     AddDayScene,
