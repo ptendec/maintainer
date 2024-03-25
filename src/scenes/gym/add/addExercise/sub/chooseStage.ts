@@ -1,7 +1,7 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
+import { PrismaService } from 'src/config/prisma/prisma.service';
 import { GYM_ADD_EXERCISE_STEPS } from 'src/config/steps';
 import { GymSceneContext } from 'src/config/types';
-import { PrismaService } from 'src/prisma/prisma.service';
 
 @Scene(GYM_ADD_EXERCISE_STEPS.CHOOSE_STAGE_FOR_EXERCISE)
 export class ChooseStageForExerciseScene {

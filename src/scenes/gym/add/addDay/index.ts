@@ -1,6 +1,6 @@
 import { Ctx, Wizard, WizardStep } from 'nestjs-telegraf';
+import { PrismaService } from 'src/config/prisma/prisma.service';
 import { GYM_ADD_STEPS } from 'src/config/steps';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { WizardContext } from 'telegraf/typings/scenes';
 
 @Wizard(GYM_ADD_STEPS.ADD_DAY)

@@ -1,6 +1,6 @@
 import { Ctx, Wizard, WizardStep } from 'nestjs-telegraf';
+import { PrismaService } from 'src/config/prisma/prisma.service';
 import { GYM_ADD_EXERCISE_STEPS } from 'src/config/steps';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { MaxOrderService } from 'src/shared/max-order.service';
 import { WizardContext } from 'telegraf/typings/scenes';
 
@@ -52,7 +52,6 @@ export class AddExerciseScene {
     } else {
       ctx.reply('Произошла ошибка, попробуйте снова.');
     }
-    ctx.wizard.next();
   }
 
   @WizardStep(4)
@@ -61,19 +60,6 @@ export class AddExerciseScene {
     if (repeats) {
       // @ts-expect-error repeats
       ctx.wizard.state.repeats = Number(repeats);
-      ctx.reply('Введите примечание');
-      ctx.wizard.next();
-    } else {
-      ctx.reply('Произошла ошибка, попробуйте снова.');
-    }
-  }
-
-  @WizardStep(5)
-  async writeRemark(@Ctx() ctx: WizardContext) {
-    const remark = ctx.text;
-    if (remark) {
-      // @ts-expect-error remark
-      ctx.wizard.state.remark = remark;
       ctx.reply('Отправьте видео');
       ctx.wizard.next();
     } else {
@@ -81,32 +67,49 @@ export class AddExerciseScene {
     }
   }
 
-  @WizardStep(6)
+  @WizardStep(5)
   async onSentVideo(@Ctx() ctx: WizardContext) {
-    console.log(ctx);
     // @ts-expect-error animation
     const animation = ctx.update.message.animation;
-    if (!animation) return;
     // @ts-expect-error video
     ctx.wizard.state.video = animation.file_id;
+    ctx.reply('Видео получено');
+    ctx.reply('Введите примечание');
     ctx.wizard.next();
+    console.log('ctx.wizard.next()', ctx.wizard.next());
+  }
+
+  @WizardStep(6)
+  async writeRemark(@Ctx() ctx: WizardContext) {
+    const remark = ctx.text;
+    if (remark) {
+      // @ts-expect-error remark
+      ctx.wizard.state.remark = remark;
+      console.log('ccc', ctx.wizard.next());
+      // ctx.wizard.next();
+    } else {
+      ctx.reply('Произошла ошибка, попробуйте снова.');
+    }
   }
 
   @WizardStep(7)
-  async addExercise(
+  async createExerciseForGym(
     @Ctx()
     ctx: WizardContext & {
       session: { stageId: number; dayId: number };
     },
   ) {
+    console.log('шаааг');
     const { name, sets, repeats, remark, video } = ctx.wizard
       .state as ExerciseState;
 
     const maxOrder = await this.maxOrderService.findMaxOrder('exercise', {
-      name: 'dayId',
+      name: 'stageId',
       value: ctx.session.stageId,
     });
-    await this.prisma.exercise
+    console.log('maxOrder', maxOrder);
+    console.log('session', ctx.session.stageId);
+    this.prisma.exercise
       .create({
         data: {
           name,
@@ -125,6 +128,7 @@ export class AddExerciseScene {
       .catch((error) => {
         console.error(error);
         ctx.reply('Произошла ошибка при добавлении упражнения.');
+        ctx.scene.leave();
       });
   }
 }

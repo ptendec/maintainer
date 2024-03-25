@@ -1,7 +1,7 @@
 import { Ctx, On, Scene, SceneEnter } from 'nestjs-telegraf';
+import { PrismaService } from 'src/config/prisma/prisma.service';
 import { GYM_ADD_STAGE_STEPS } from 'src/config/steps';
 import { GymSceneContext } from 'src/config/types';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { MaxOrderService } from 'src/shared/max-order.service';
 import { SceneContext } from 'telegraf/typings/scenes';
 
@@ -19,10 +19,11 @@ export class AddStageScene {
 
   @On('text')
   async onText(@Ctx() ctx: GymSceneContext) {
-    const maxOrder = await this.maxOrderService.findMaxOrder('exercise', {
+    const maxOrder = await this.maxOrderService.findMaxOrder('stage', {
       name: 'dayId',
-      value: ctx.session.stageId,
+      value: ctx.session.dayId,
     });
+
     if (ctx.text)
       this.prisma.stage
         .create({

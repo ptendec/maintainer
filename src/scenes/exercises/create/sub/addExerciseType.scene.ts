@@ -1,7 +1,7 @@
 import { Ctx, On, Scene, SceneEnter } from 'nestjs-telegraf';
+import { PrismaService } from 'src/config/prisma/prisma.service';
 import { ADD_EXERCISE } from 'src/config/steps';
 import { ExercisesSceneContext } from 'src/config/types';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { SceneContext } from 'telegraf/typings/scenes';
 
 @Scene(ADD_EXERCISE.ADD_EXERCISE_TYPE)

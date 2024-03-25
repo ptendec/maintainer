@@ -7,14 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model RefreshToken {
+  id      Int      @id @default(autoincrement())
+  userId  Int
+  user    User     @relation(fields: [userId], references: [id])
+  token   String   @unique
+  expires DateTime
+}
+
 model User {
-  id        BigInt    @id @unique()
-  firstName String?
-  lastName  String?
-  username  String?
-  chatId    BigInt?
-  Diet      Diet[]
-  Program   Program[]
+  id           Int            @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String         @unique()
+  password     String
+  Diet         Diet[]
+  Program      Program[]
+  telegramUser TelegramUser?
+  RefreshToken RefreshToken[]
+}
+
+model TelegramUser {
+  id       String  @id
+  userId   Int     @unique
+  chatId   String  @unique
+  username String?
+  language String?
+  user     User    @relation(fields: [userId], references: [id])
 }
 
 model ExerciseType {
@@ -43,7 +62,7 @@ model Diet {
   id     Int    @id @default(autoincrement())
   name   String
   dishes Dish[]
-  userId BigInt
+  userId Int
   user   User   @relation(fields: [userId], references: [id])
 }
 
@@ -69,11 +88,11 @@ model Schedule {
 }
 
 model Program {
-  id     Int     @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   name   String
   days   Day[]
-  User   User?   @relation(fields: [userId], references: [id])
-  userId BigInt?
+  User   User?  @relation(fields: [userId], references: [id])
+  userId Int?
 }
 
 model Day {
@@ -105,3 +124,5 @@ model Exercise {
   order   Int
   stage   Stage   @relation(fields: [stageId], references: [id])
 }
+
+// TODO: Проверить ? и в DTO на undefined

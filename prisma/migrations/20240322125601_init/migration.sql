@@ -1,12 +1,26 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
     "firstName" TEXT,
     "lastName" TEXT,
     "username" TEXT,
-    "chatId" BIGINT,
+    "chatId" TEXT,
+    "email" TEXT,
+    "otp" TEXT,
+    "password" TEXT NOT NULL DEFAULT '',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "TelegramUser" (
+    "id" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "chatId" TEXT NOT NULL,
+    "username" TEXT,
+    "language" TEXT,
+
+    CONSTRAINT "TelegramUser_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -40,7 +54,7 @@ CREATE TABLE "Video" (
 CREATE TABLE "Diet" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "userId" BIGINT NOT NULL,
+    "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Diet_pkey" PRIMARY KEY ("id")
 );
@@ -73,7 +87,7 @@ CREATE TABLE "Schedule" (
 CREATE TABLE "Program" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "userId" BIGINT,
+    "userId" INTEGER,
 
     CONSTRAINT "Program_pkey" PRIMARY KEY ("id")
 );
@@ -113,10 +127,25 @@ CREATE TABLE "Exercise" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_chatId_key" ON "User"("chatId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "TelegramUser_userId_key" ON "TelegramUser"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "TelegramUser_chatId_key" ON "TelegramUser"("chatId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Schedule_dishId_key" ON "Schedule"("dishId");
+
+-- AddForeignKey
+ALTER TABLE "TelegramUser" ADD CONSTRAINT "TelegramUser_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "BodyPart" ADD CONSTRAINT "BodyPart_exerciseTypeId_fkey" FOREIGN KEY ("exerciseTypeId") REFERENCES "ExerciseType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

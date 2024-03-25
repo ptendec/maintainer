@@ -1,14 +1,27 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { AuthModule } from 'src/auth/auth.module';
+import { PrismaModule } from 'src/config/prisma/prisma.module';
 import { ReminderService } from 'src/reminder/reminder.service';
 import { TelegramModule } from 'src/telegram/telegram.module';
+import { DayModule } from 'src/web/gym/day/day.module';
+import { ExerciseModule } from 'src/web/gym/exercise/exercise.module';
+import { ProgramModule } from 'src/web/gym/program/program.module';
+import { StageModule } from 'src/web/gym/stage/stage.module';
 
 @Module({
   imports: [
+    // Web
+    AuthModule,
+    ProgramModule,
+    DayModule,
+    StageModule,
+    ExerciseModule,
+    // Modules
     TelegramModule,
     PrismaModule,
+    // Config
     ConfigModule.forRoot({
       isGlobal: true,
     }),

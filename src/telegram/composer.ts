@@ -1,6 +1,6 @@
 import { Composer, Ctx, Hears, Start } from 'nestjs-telegraf';
 import { ACTIONS, ADD, DO } from 'src/config/actions';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/config/prisma/prisma.service';
 import { Markup } from 'telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 
@@ -16,19 +16,17 @@ export class ComposerCommon {
     try {
       const existingUser = await this.prisma.user.findUnique({
         where: {
-          id: BigInt(ctx.from.id),
+          id: ctx.from.id,
         },
       });
-      if (!existingUser)
-        await this.prisma.user.create({
-          data: {
-            id: BigInt(ctx.from.id),
-            username: ctx.message?.from.username,
-            firstName: ctx.message?.from.first_name,
-            lastName: ctx.message?.from.last_name,
-            chatId: ctx.message?.chat?.id,
-          },
-        });
+      // if (!existingUser)
+      // await this.prisma.user.create({
+      //   data: {
+      //     id: ctx.from.id,
+      //     firstName: ctx.message?.from.first_name,
+      //     lastName: ctx.message?.from.last_name,
+      //   },
+      // });
     } catch (error) {
       console.log(error);
     }
