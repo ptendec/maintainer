@@ -31,7 +31,7 @@ const bootstrap = async () => {
     });
 
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: process.env.ORIGIN,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: ['Authorization', 'Content-Type', 'Accept'], // Allow these headers
     credentials: true, // Указываете, поддерживаются ли учетные данные (куки, HTTP аутентификация и т.д.)
