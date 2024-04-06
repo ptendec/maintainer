@@ -1,15 +1,26 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { CreateExerciseDto } from './dto/create-exercise.dto';
-import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { MaxOrderService } from 'src/shared/max-order.service';
+import { CreateExerciseDto } from './dto/create.dto';
+import { UpdateExerciseDto } from './dto/update.dto';
 
 @Injectable()
 export class ExerciseService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private maxOrderService: MaxOrderService,
+  ) {}
 
   async create(createExerciseDto: CreateExerciseDto) {
+    const maxOrder = await this.maxOrderService.findMaxOrder('exercise', {
+      name: 'stageId',
+      value: createExerciseDto.stageId,
+    });
     return this.prisma.exercise.create({
-      data: createExerciseDto,
+      data: {
+        ...createExerciseDto,
+        order: maxOrder + 1,
+      },
     });
   }
 

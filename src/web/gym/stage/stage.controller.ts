@@ -9,9 +9,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateStageDto } from './dto/create-stage.dto';
-import { GetStageDto } from './dto/get-stage.dto';
-import { UpdateStageDto } from './dto/update-stage.dto';
+import { CreateStageDto } from './dto/create.dto';
+import { GetStageDto } from './dto/get.dto';
+import { UpdateStageDto } from './dto/update.dto';
 import { StageService } from './stage.service';
 
 @ApiTags('stages')
@@ -34,7 +34,7 @@ export class StageController {
   @ApiResponse({
     status: 200,
     description: 'The stage with the specified ID.',
-    type: CreateStageDto,
+    type: GetStageDto,
   })
   @ApiResponse({ status: 404, description: 'Stage not found.' })
   async findOne(@Param('id') id: string) {

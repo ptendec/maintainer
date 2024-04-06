@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { CreateDayDto } from './dto/create-day.dto';
-import { UpdateDayDto } from './dto/update-day.dto';
+import { CreateDayDto } from './dto/create.dto';
+import { UpdateDayDto } from './dto/update.dto';
 
 @Injectable()
 export class DayService {

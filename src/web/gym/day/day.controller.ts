@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DayService } from './day.service';
-import { CreateDayDto } from './dto/create-day.dto';
+import { CreateDayDto } from './dto/create.dto';
 import { GetDayDto } from './dto/get.dto';
-import { UpdateDayDto } from './dto/update-day.dto';
+import { UpdateDayDto } from './dto/update.dto';
 
 @ApiTags('days')
 @Controller('days')
@@ -34,7 +34,7 @@ export class DayController {
   @ApiResponse({
     status: 200,
     description: 'The day with the specified ID.',
-    type: CreateDayDto,
+    type: GetDayDto,
   })
   @ApiResponse({ status: 404, description: 'Day not found.' })
   async findOne(@Param('id') id: string) {

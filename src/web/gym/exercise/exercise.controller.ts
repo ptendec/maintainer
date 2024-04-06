@@ -11,8 +11,9 @@ import {
 } from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { CreateExerciseDto } from './dto/create-exercise.dto';
-import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { CreateExerciseDto } from './dto/create.dto';
+import { GetExerciseDto } from './dto/get.dto';
+import { UpdateExerciseDto } from './dto/update.dto';
 import { ExerciseService } from './exercise.service';
 
 @ApiTags('exercises')
@@ -36,7 +37,7 @@ export class ExerciseController {
   @ApiResponse({
     status: 200,
     description: 'The exercise with the specified ID.',
-    type: CreateExerciseDto,
+    type: GetExerciseDto,
   })
   @ApiResponse({ status: 404, description: 'Exercise not found.' })
   async findOne(@Param('id') id: string) {
@@ -47,7 +48,7 @@ export class ExerciseController {
   @ApiResponse({
     status: 200,
     description: 'Array of all exercises.',
-    type: [CreateExerciseDto],
+    type: [GetExerciseDto],
   })
   @ApiQuery({
     name: 'stageId',

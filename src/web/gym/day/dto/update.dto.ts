@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { CreateDayDto } from './create-day.dto';
+import { CreateDayDto } from './create.dto';
 
 export class UpdateDayDto extends PartialType(CreateDayDto) {
   @ApiProperty({ required: false })

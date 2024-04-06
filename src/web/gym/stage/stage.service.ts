@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { MaxOrderService } from 'src/shared/max-order.service';
-import { CreateStageDto } from './dto/create-stage.dto';
-import { UpdateStageDto } from './dto/update-stage.dto';
+import { CreateStageDto } from './dto/create.dto';
+import { UpdateStageDto } from './dto/update.dto';
 
 @Injectable()
 export class StageService {
