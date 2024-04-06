@@ -6,10 +6,12 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DayService } from './day.service';
 import { CreateDayDto } from './dto/create-day.dto';
+import { GetDayDto } from './dto/get.dto';
 import { UpdateDayDto } from './dto/update-day.dto';
 
 @ApiTags('days')
@@ -43,10 +45,15 @@ export class DayController {
   @ApiResponse({
     status: 200,
     description: 'Array of all days.',
-    type: [CreateDayDto],
+    type: [GetDayDto],
   })
-  async findAll() {
-    return this.dayService.findAll();
+  @ApiQuery({
+    name: 'programId',
+    required: false,
+    type: Number,
+  })
+  async findAll(@Query('programId') programId?: number) {
+    return this.dayService.findAll(programId);
   }
 
   @Put(':id')

@@ -1,15 +1,27 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
+import { MaxOrderService } from 'src/shared/max-order.service';
 import { CreateStageDto } from './dto/create-stage.dto';
 import { UpdateStageDto } from './dto/update-stage.dto';
 
 @Injectable()
 export class StageService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private maxOrderService: MaxOrderService,
+  ) {}
 
   async create(createStageDto: CreateStageDto) {
+    const maxOrder = await this.maxOrderService.findMaxOrder('stage', {
+      name: 'dayId',
+      value: createStageDto.dayId,
+    });
+
     return this.prisma.stage.create({
-      data: createStageDto,
+      data: {
+        ...createStageDto,
+        order: maxOrder + 1,
+      },
     });
   }
 
@@ -23,8 +35,18 @@ export class StageService {
     return stage;
   }
 
-  async findAll() {
-    return this.prisma.stage.findMany();
+  async findAll(dayId?: number) {
+    let params = {};
+
+    if (dayId) {
+      params = {
+        where: {
+          dayId: dayId,
+        },
+      };
+    }
+
+    return this.prisma.stage.findMany(params);
   }
 
   async update(id: number, updateStageDto: UpdateStageDto) {

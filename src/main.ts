@@ -30,6 +30,13 @@ const bootstrap = async () => {
       reply.send(document);
     });
 
+  app.enableCors({
+    origin: 'http://localhost:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: ['Authorization', 'Content-Type', 'Accept'], // Allow these headers
+    credentials: true, // Указываете, поддерживаются ли учетные данные (куки, HTTP аутентификация и т.д.)
+  });
+
   await app.register(fastifyCookie, {
     secret: 'my-secret',
     // TODO: Добавьте env переменные

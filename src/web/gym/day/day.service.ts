@@ -23,8 +23,17 @@ export class DayService {
     return day;
   }
 
-  async findAll() {
-    return this.prisma.day.findMany();
+  async findAll(programId?: number) {
+    let params = {};
+
+    if (programId) {
+      params = {
+        where: {
+          programId: programId,
+        },
+      };
+    }
+    return this.prisma.day.findMany(params);
   }
 
   async update(id: number, updateDayDto: UpdateDayDto) {

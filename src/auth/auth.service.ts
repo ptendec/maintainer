@@ -54,42 +54,38 @@ export class AuthService {
 
     const payload = { ...userDto };
 
-    const access_token = this.jwtService.sign(payload, {
+    const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: '1h',
+      expiresIn: '60s',
     });
 
-    const refresh_token = this.jwtService.sign(payload, {
-      secret: process.env.JWT_REFRESH_SECRET,
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
       expiresIn: '30d',
     });
 
     await this.prisma.refreshToken.create({
       data: {
         userId: user.id,
-        token: refresh_token,
+        token: refreshToken,
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       },
     });
 
-    return { access_token, refresh_token, user: userDto };
+    return { accessToken, refreshToken, user: userDto };
   }
 
   async refreshToken(oldRefreshToken: string) {
     try {
       const payload = this.jwtService.verify(oldRefreshToken, {
-        secret: process.env.JWT_REFRESH_SECRET,
+        secret: process.env.JWT_SECRET,
       });
-
       const tokenInDb = await this.prisma.refreshToken.findUnique({
         where: { token: oldRefreshToken },
       });
-
-      console.log('tokenInDb', tokenInDb);
       if (!tokenInDb || tokenInDb.expires < new Date()) {
         throw new Error('Invalid token');
       }
-
       const user = await this.prisma.user.findUnique({
         where: { id: payload.id },
       });
@@ -102,14 +98,14 @@ export class AuthService {
         { email: user.email, id: user.id },
         {
           secret: process.env.JWT_SECRET,
-          expiresIn: '1h',
+          expiresIn: '60s',
         },
       );
 
       const newRefreshToken = this.jwtService.sign(
         { email: user.email, id: user.id },
         {
-          secret: process.env.JWT_REFRESH_SECRET,
+          secret: process.env.JWT_SECRET,
           expiresIn: '30d',
         },
       );

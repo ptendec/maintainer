@@ -14,5 +14,5 @@ export class LoginUserResDto {
   user: UserDto;
 
   @ApiProperty()
-  access_token: string;
+  accessToken: string;
 }

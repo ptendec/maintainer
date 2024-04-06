@@ -6,9 +6,11 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateStageDto } from './dto/create-stage.dto';
+import { GetStageDto } from './dto/get-stage.dto';
 import { UpdateStageDto } from './dto/update-stage.dto';
 import { StageService } from './stage.service';
 
@@ -43,10 +45,15 @@ export class StageController {
   @ApiResponse({
     status: 200,
     description: 'Array of all stages.',
-    type: [CreateStageDto],
+    type: [GetStageDto],
   })
-  async findAll() {
-    return this.stageService.findAll();
+  @ApiQuery({
+    name: 'dayId',
+    required: false,
+    type: Number,
+  })
+  async findAll(@Query('dayId') dayId?: number) {
+    return this.stageService.findAll(dayId);
   }
 
   @Put(':id')

@@ -12,6 +12,7 @@ import {
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto, LoginUserResDto } from './dto/login-user.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { UserDto } from './dto/user.dto';
 
 interface UserPayload {
@@ -46,21 +47,21 @@ export class AuthController {
     @Req() req: RequestWithUser,
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
-    const { access_token, refresh_token } = await this.authService.login(
+    const { accessToken, refreshToken } = await this.authService.login(
       req.user,
     );
-    res.setCookie('refresh_token', refresh_token, {
+    res.setCookie('refresh_token', refreshToken, {
       httpOnly: true,
       path: '/',
     });
-    return { access_token, user: req.user };
+    return { accessToken, user: req.user };
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('refresh')
   @ApiResponse({
     status: 200,
     description: 'Token refreshed successfully.',
+    type: RefreshTokenDto,
   })
   async refresh(
     @Req() request: FastifyRequest,
@@ -70,7 +71,6 @@ export class AuthController {
     if (!refreshToken) {
       throw new Error('Refresh token not found');
     }
-    console.log(refreshToken);
 
     const { accessToken, refreshToken: newRefreshToken } =
       await this.authService.refreshToken(refreshToken);
