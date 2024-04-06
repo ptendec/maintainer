@@ -13,23 +13,6 @@ export class ComposerCommon {
     // TODO Переписать на middleware
     ctx.scene.leave();
     if (!ctx.from?.id) return;
-    try {
-      const existingUser = await this.prisma.user.findUnique({
-        where: {
-          id: ctx.from.id,
-        },
-      });
-      // if (!existingUser)
-      // await this.prisma.user.create({
-      //   data: {
-      //     id: ctx.from.id,
-      //     firstName: ctx.message?.from.first_name,
-      //     lastName: ctx.message?.from.last_name,
-      //   },
-      // });
-    } catch (error) {
-      console.log(error);
-    }
     const actions = ACTIONS.map((action) => action.name);
     await ctx.reply('Выбирайте', Markup.keyboard([actions]).resize());
   }

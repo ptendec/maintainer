@@ -19,10 +19,10 @@ import { ProgramService } from './program.service';
 
 @ApiTags('programs')
 @Controller('programs')
+@UseGuards(JwtAuthGuard)
 export class ProgramController {
   constructor(private readonly programService: ProgramService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiResponse({
     status: 201,

@@ -7,8 +7,10 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { DayService } from './day.service';
 import { CreateDayDto } from './dto/create.dto';
 import { GetDayDto } from './dto/get.dto';
@@ -16,6 +18,7 @@ import { UpdateDayDto } from './dto/update.dto';
 
 @ApiTags('days')
 @Controller('days')
+@UseGuards(JwtAuthGuard)
 export class DayController {
   constructor(private readonly dayService: DayService) {}
 

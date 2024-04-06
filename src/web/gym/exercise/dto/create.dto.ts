@@ -21,7 +21,4 @@ export class CreateExerciseDto {
 
   @ApiProperty()
   stageId: number;
-
-  @ApiProperty()
-  order: number;
 }

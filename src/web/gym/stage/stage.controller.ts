@@ -7,8 +7,10 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateStageDto } from './dto/create.dto';
 import { GetStageDto } from './dto/get.dto';
 import { UpdateStageDto } from './dto/update.dto';
@@ -16,6 +18,7 @@ import { StageService } from './stage.service';
 
 @ApiTags('stages')
 @Controller('stages')
+@UseGuards(JwtAuthGuard)
 export class StageController {
   constructor(private readonly stageService: StageService) {}
 
