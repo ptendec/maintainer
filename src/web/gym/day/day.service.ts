@@ -29,7 +29,7 @@ export class DayService {
     if (programId) {
       params = {
         where: {
-          programId: programId,
+          programId: Number(programId),
         },
       };
     }

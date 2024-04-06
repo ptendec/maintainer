@@ -41,7 +41,7 @@ export class StageService {
     if (dayId) {
       params = {
         where: {
-          dayId: dayId,
+          dayId: Number(dayId),
         },
       };
     }

@@ -23,8 +23,17 @@ export class ExerciseService {
     return exercise;
   }
 
-  async findAll() {
-    return this.prisma.exercise.findMany();
+  async findAll(stageId?: string) {
+    let params = {};
+
+    if (stageId) {
+      params = {
+        where: {
+          stageId: Number(stageId),
+        },
+      };
+    }
+    return this.prisma.exercise.findMany(params);
   }
 
   async update(id: number, updateExerciseDto: UpdateExerciseDto) {

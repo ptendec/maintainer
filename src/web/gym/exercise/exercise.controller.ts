@@ -6,9 +6,10 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
@@ -48,8 +49,13 @@ export class ExerciseController {
     description: 'Array of all exercises.',
     type: [CreateExerciseDto],
   })
-  async findAll() {
-    return this.exerciseService.findAll();
+  @ApiQuery({
+    name: 'stageId',
+    required: false,
+    type: String,
+  })
+  async findAll(@Query('stageId') stageId?: string) {
+    return this.exerciseService.findAll(stageId);
   }
 
   @Put(':id')
