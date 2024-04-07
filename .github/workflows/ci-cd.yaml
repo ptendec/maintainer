@@ -31,6 +31,9 @@ jobs:
       - name: installing packages
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && yarn"
 
+      - name: Run Prisma migration
+        run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && npx prisma migrate deploy --preview-feature"
+
       - name: Build the project
         run: ssh $SSH_USER@$SSH_HOST "cd $WORK_DIR && yarn build"
 
