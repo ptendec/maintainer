@@ -16,8 +16,8 @@ import { GetExerciseDto } from './dto/get.dto';
 import { UpdateExerciseDto } from './dto/update.dto';
 import { ExerciseService } from './exercise.service';
 
-@ApiTags('exercises')
 @UseGuards(JwtAuthGuard)
+@ApiTags('exercises')
 @Controller('exercises')
 export class ExerciseController {
   constructor(private readonly exerciseService: ExerciseService) {}

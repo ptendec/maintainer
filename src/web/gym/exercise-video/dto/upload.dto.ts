@@ -1,3 +1,3 @@
 export class UploadDto {
-  exerciseId: number;
+  exerciseId: string;
 }

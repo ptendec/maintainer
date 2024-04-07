@@ -1,5 +1,5 @@
 import { Composer, Ctx, Hears, Start } from 'nestjs-telegraf';
-import { ACTIONS, ADD, DO } from 'src/config/actions';
+import { ACTIONS } from 'src/config/actions';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { Markup } from 'telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
@@ -10,42 +10,22 @@ export class ComposerCommon {
 
   @Start()
   async start(@Ctx() ctx: SceneContext) {
-    // TODO Переписать на middleware
+    // TODO Переписать на middleware авторизацию
     ctx.scene.leave();
     if (!ctx.from?.id) return;
-    const actions = ACTIONS.map((action) => action.name);
-    await ctx.reply('Выбирайте', Markup.keyboard([actions]).resize());
+    await ctx.reply(
+      'Выбирайте',
+      Markup.keyboard([ACTIONS.DO_EXERCISE, ACTIONS.DO_GYM]).resize(),
+    );
   }
 
-  @Hears(ACTIONS[0].name)
-  async add(@Ctx() ctx: SceneContext) {
-    const actions = ADD.map((action) => action.name);
-    await ctx.reply('Выбирайте', Markup.keyboard([actions]).resize());
+  @Hears(ACTIONS.DO_EXERCISE)
+  async doExercise(@Ctx() ctx: SceneContext) {
+    ctx.scene.enter(ACTIONS.DO_EXERCISE);
   }
 
-  @Hears(ACTIONS[1].name)
-  async do(@Ctx() ctx: SceneContext) {
-    const actions = DO.map((action) => action.name);
-    await ctx.reply('Выбирайте', Markup.keyboard([actions]).resize());
-  }
-
-  @Hears(DO[0].name)
-  async doExercises(@Ctx() ctx: SceneContext) {
-    ctx.scene.enter(DO[0].id);
-  }
-
-  @Hears(DO[1].name)
+  @Hears(ACTIONS.DO_GYM)
   async doGym(@Ctx() ctx: SceneContext) {
-    ctx.scene.enter(DO[1].id);
-  }
-
-  @Hears(ADD[0].name)
-  async addExercises(@Ctx() ctx: SceneContext) {
-    ctx.scene.enter(ADD[0].id);
-  }
-
-  @Hears(ADD[1].name)
-  async addGym(@Ctx() ctx: SceneContext) {
-    ctx.scene.enter(ADD[1].id);
+    ctx.scene.enter(ACTIONS.DO_GYM);
   }
 }
