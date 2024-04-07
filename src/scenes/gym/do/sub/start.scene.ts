@@ -1,3 +1,4 @@
+import { Exercise, ExerciseVideo } from '@prisma/client';
 import { Ctx, Hears, Scene, SceneEnter } from 'nestjs-telegraf';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { GYM_DO_STEPS } from 'src/config/steps';
@@ -25,6 +26,9 @@ export class GymStartScene {
       orderBy: {
         order: 'asc',
       },
+      include: {
+        exerciseVideo: true,
+      },
     });
     ctx.session.stageId = stages[0].id;
     ctx.session.exerciseId = stageExercises[0].id;
@@ -33,11 +37,27 @@ export class GymStartScene {
     ctx.reply('Первый этап : ' + stages[0].name);
     ctx.reply(
       'Упражнение: ' + stageExercises[0].name,
-      Markup.keyboard([['Завершил']]).resize(),
+      Markup.keyboard([['Следующий']]).resize(),
     );
   }
 
-  @Hears('Завершил')
+  private async sendExerciseDetails(
+    ctx: GymSceneContext,
+    exercise: Exercise & { exerciseVideo: ExerciseVideo[] },
+  ) {
+    let replyMessage = 'Упражнение: ' + exercise.name;
+    replyMessage += exercise.remark ? `\nПримечание: ${exercise.remark}` : '';
+    replyMessage += exercise.warning ? `\nВнимание: ${exercise.warning}` : '';
+    replyMessage += exercise.sets ? `\nПодходы: ${exercise.sets}` : '';
+    replyMessage += exercise.repeats ? `\nПовторения: ${exercise.repeats}` : '';
+
+    ctx.reply(replyMessage, Markup.keyboard([['Следующий']]).resize());
+    exercise.exerciseVideo.forEach((video) => {
+      ctx.replyWithVideo(video.path);
+    });
+  }
+
+  @Hears('Следующий')
   async end(@Ctx() ctx: GymSceneContext) {
     const currentIndex = ctx.session.exercises.indexOf(ctx.session.exerciseId);
     if (currentIndex < ctx.session.exercises.length - 1) {
@@ -45,30 +65,18 @@ export class GymStartScene {
       ctx.session.exerciseId = nextExerciseId;
       const nextExercise = await this.prisma.exercise.findUnique({
         where: { id: nextExerciseId },
+        include: { exerciseVideo: true },
       });
-
-      let replyMessage = 'Следующее упражнение: ' + nextExercise?.name;
-
-      if (nextExercise?.remark) {
-        replyMessage += `\nПримечание: ${nextExercise.remark}`;
-      }
-
-      if (nextExercise?.warning) {
-        replyMessage += `\nВнимание: ${nextExercise.warning}`;
-      }
-
-      if (nextExercise?.sets) {
-        replyMessage += `\nПодходы: ${nextExercise.sets}`;
-      }
-
-      if (nextExercise?.repeats) {
-        replyMessage += `\nПовторения: ${nextExercise.repeats}`;
-      }
-
-      ctx.reply(replyMessage);
-
-      if (nextExercise?.video) {
-        ctx.replyWithAnimation(nextExercise.video);
+      if (nextExercise) {
+        ctx.session.exercises[currentIndex + 1] = nextExercise.id;
+        this.sendExerciseDetails(ctx, nextExercise);
+      } else {
+        ctx.reply(
+          'Тренировка завершена!',
+          Markup.inlineKeyboard([
+            Markup.button.callback('Закончить', '/start'),
+          ]),
+        );
       }
     } else {
       const currentStageIndex = ctx.session.stages.indexOf(ctx.session.stageId);
@@ -78,12 +86,18 @@ export class GymStartScene {
         const stageExercises = await this.prisma.exercise.findMany({
           where: { stageId: nextStageId },
           orderBy: { order: 'asc' },
+          include: { exerciseVideo: true },
         });
         ctx.session.exercises = stageExercises.map((exercise) => exercise.id);
         ctx.session.exerciseId = stageExercises[0].id;
         ctx.reply('Следующий этап: ' + stageExercises[0].name);
       } else {
-        ctx.reply('Тренировка завершена!');
+        ctx.reply(
+          'Тренировка завершена!',
+          Markup.inlineKeyboard([
+            Markup.button.callback('Закончить', '/start'),
+          ]),
+        );
       }
     }
   }

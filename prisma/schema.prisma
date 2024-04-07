@@ -131,7 +131,7 @@ model Exercise {
   stageId       Int
   order         Int
   stage         Stage           @relation(fields: [stageId], references: [id])
-  ExerciseVideo ExerciseVideo[]
+  exerciseVideo ExerciseVideo[]
 }
 
 // TODO: Проверить ? и в DTO на undefined
