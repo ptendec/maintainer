@@ -35,7 +35,7 @@ export class ExerciseVideoController {
   @UseInterceptors(
     FilesInterceptor('files', 4, {
       storage: new DiskStorage({
-        dest: 'uploads',
+        dest: __dirname + 'uploads',
         filename(file) {
           return `${Date.now()}-${file.filename}`;
         },

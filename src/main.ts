@@ -2,7 +2,6 @@ import fastifyCookie from '@fastify/cookie';
 import multiPart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
 import { NestFactory } from '@nestjs/core';
-import Fastify from 'fastify';
 
 import {
   FastifyAdapter,
@@ -14,11 +13,17 @@ import { Scenes } from 'telegraf';
 import { AppModule } from './app/app.module';
 
 const bootstrap = async () => {
+  const adapter = new FastifyAdapter();
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    adapter,
   );
-  const fastify = Fastify();
+
+  app.register(fastifyStatic, {
+    root: __dirname + '/uploads/',
+    prefix: '/public/',
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Example API')
@@ -35,23 +40,19 @@ const bootstrap = async () => {
       reply.send(document);
     });
 
-  app.enableCors({
-    origin: process.env.ORIGIN,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: ['Authorization', 'Content-Type', 'Accept'], // Allow these headers
-    credentials: true, // Указываете, поддерживаются ли учетные данные (куки, HTTP аутентификация и т.д.)
-  });
-
-  await app.register(multiPart);
-  fastify.register(fastifyStatic, {
-    root: 'uploads/',
-    prefix: '/public/',
-  });
-
   await app.register(fastifyCookie, {
     secret: 'my-secret',
     // TODO: Добавьте env переменные
   });
+  await app.register(multiPart);
+
+  app.enableCors({
+    origin: process.env.ORIGIN,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: ['Authorization', 'Content-Type', 'Accept'],
+    credentials: true,
+  });
+
   const bot = app.get(getBotToken());
   const stage = new Scenes.Stage();
   bot.use(stage.middleware());
