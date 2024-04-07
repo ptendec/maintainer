@@ -85,8 +85,7 @@ export class AddExerciseScene {
     if (remark) {
       // @ts-expect-error remark
       ctx.wizard.state.remark = remark;
-      console.log('ccc', ctx.wizard.next());
-      // ctx.wizard.next();
+      ctx.wizard.next();
     } else {
       ctx.reply('Произошла ошибка, попробуйте снова.');
     }
@@ -107,8 +106,6 @@ export class AddExerciseScene {
       name: 'stageId',
       value: ctx.session.stageId,
     });
-    console.log('maxOrder', maxOrder);
-    console.log('session', ctx.session.stageId);
     this.prisma.exercise
       .create({
         data: {
@@ -119,6 +116,7 @@ export class AddExerciseScene {
           video,
           stageId: ctx.session.stageId,
           order: maxOrder + 1,
+          // TODO: Add exerciseVideoId
         },
       })
       .then(() => {

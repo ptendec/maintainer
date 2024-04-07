@@ -26,7 +26,7 @@ export class ExerciseController {
   @ApiResponse({
     status: 201,
     description: 'The exercise has been successfully created.',
-    type: CreateExerciseDto,
+    type: GetExerciseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async create(@Body() createExerciseDto: CreateExerciseDto) {

@@ -11,9 +11,6 @@ export class CreateExerciseDto {
   warning?: string;
 
   @ApiProperty({ required: false })
-  video?: string;
-
-  @ApiProperty({ required: false })
   sets?: number;
 
   @ApiProperty({ required: false })

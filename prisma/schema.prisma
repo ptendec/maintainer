@@ -112,17 +112,26 @@ model Stage {
   order     Int
 }
 
+model ExerciseVideo {
+  id         Int      @id @default(autoincrement())
+  path       String
+  name       String
+  exerciseId Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+}
+
 model Exercise {
-  id      Int     @id @default(autoincrement())
-  name    String
-  remark  String?
-  warning String?
-  video   String?
-  sets    Int?
-  repeats Int?
-  stageId Int
-  order   Int
-  stage   Stage   @relation(fields: [stageId], references: [id])
+  id            Int             @id @default(autoincrement())
+  name          String
+  remark        String?
+  warning       String?
+  video         String?
+  sets          Int?
+  repeats       Int?
+  stageId       Int
+  order         Int
+  stage         Stage           @relation(fields: [stageId], references: [id])
+  ExerciseVideo ExerciseVideo[]
 }
 
 // TODO: Проверить ? и в DTO на undefined

@@ -1,5 +1,9 @@
 import fastifyCookie from '@fastify/cookie';
+import multiPart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
 import { NestFactory } from '@nestjs/core';
+import Fastify from 'fastify';
+
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -14,6 +18,7 @@ const bootstrap = async () => {
     AppModule,
     new FastifyAdapter(),
   );
+  const fastify = Fastify();
 
   const config = new DocumentBuilder()
     .setTitle('Example API')
@@ -35,6 +40,12 @@ const bootstrap = async () => {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: ['Authorization', 'Content-Type', 'Accept'], // Allow these headers
     credentials: true, // Указываете, поддерживаются ли учетные данные (куки, HTTP аутентификация и т.д.)
+  });
+
+  await app.register(multiPart);
+  fastify.register(fastifyStatic, {
+    root: 'uploads/',
+    prefix: '/public/',
   });
 
   await app.register(fastifyCookie, {
