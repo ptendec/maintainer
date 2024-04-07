@@ -1,10 +1,10 @@
 import { Exercise, ExerciseVideo } from '@prisma/client';
+import * as fs from 'fs';
 import { Ctx, Hears, Scene, SceneEnter } from 'nestjs-telegraf';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { GYM_DO_STEPS } from 'src/config/steps';
 import { GymSceneContext } from 'src/config/types';
 import { Markup } from 'telegraf';
-
 @Scene(GYM_DO_STEPS.START)
 export class GymStartScene {
   constructor(private readonly prisma: PrismaService) {}
@@ -52,9 +52,18 @@ export class GymStartScene {
     replyMessage += exercise.repeats ? `\nПовторения: ${exercise.repeats}` : '';
 
     ctx.reply(replyMessage, Markup.keyboard([['Следующий']]).resize());
-    exercise.exerciseVideo.forEach((video) => {
-      ctx.replyWithVideo(video.path);
-    });
+    for (const video of exercise.exerciseVideo) {
+      const filePath = process.env.IP + '/public/' + video.name;
+      console.log(filePath);
+
+      if (fs.existsSync(filePath)) {
+        // Проверка существования файла
+        ctx.replyWithVideo(filePath);
+      } else {
+        console.log('File not found:', filePath);
+        // Вывести сообщение о том, что файл не найден или просто продолжить без отправки
+      }
+    }
   }
 
   @Hears('Следующий')
@@ -73,9 +82,7 @@ export class GymStartScene {
       } else {
         ctx.reply(
           'Тренировка завершена!',
-          Markup.inlineKeyboard([
-            Markup.button.callback('Закончить', '/start'),
-          ]),
+          Markup.inlineKeyboard([Markup.button.callback('Закончить', 'start')]),
         );
       }
     } else {
@@ -92,11 +99,10 @@ export class GymStartScene {
         ctx.session.exerciseId = stageExercises[0].id;
         ctx.reply('Следующий этап: ' + stageExercises[0].name);
       } else {
+        ctx.scene.leave();
         ctx.reply(
           'Тренировка завершена!',
-          Markup.inlineKeyboard([
-            Markup.button.callback('Закончить', '/start'),
-          ]),
+          Markup.keyboard([['/start']]).resize(),
         );
       }
     }
