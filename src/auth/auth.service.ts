@@ -95,7 +95,12 @@ export class AuthService {
       }
 
       const newAccessToken = this.jwtService.sign(
-        { email: user.email, id: user.id },
+        {
+          email: user.email,
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
         {
           secret: process.env.JWT_SECRET,
           expiresIn: '1d',
@@ -103,7 +108,12 @@ export class AuthService {
       );
 
       const newRefreshToken = this.jwtService.sign(
-        { email: user.email, id: user.id },
+        {
+          email: user.email,
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
         {
           secret: process.env.JWT_SECRET,
           expiresIn: '30d',
@@ -125,5 +135,19 @@ export class AuthService {
     } catch (error) {
       throw new Error('Refresh token is invalid or has expired');
     }
+  }
+
+  async me(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 }

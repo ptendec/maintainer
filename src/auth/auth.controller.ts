@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 
@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto, LoginUserResDto } from './dto/login-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { UserDto } from './dto/user.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 interface UserPayload {
   id: number;
@@ -81,5 +82,27 @@ export class AuthController {
     });
 
     return { accessToken };
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'User retrieved successfully.',
+    type: UserDto,
+  })
+  async me(@Req() req: RequestWithUser) {
+    return this.authService.me(req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  @ApiResponse({
+    status: 200,
+    description: 'User logged out successfully.',
+  })
+  async logout(@Res({ passthrough: true }) res: FastifyReply) {
+    res.clearCookie('refresh_token', { path: '/' });
+    return 'Logged out successfully';
   }
 }
