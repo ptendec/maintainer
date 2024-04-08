@@ -1,6 +1,5 @@
-import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './local-auth.guard';
 
 import { Req } from '@nestjs/common';
 import {
@@ -35,7 +34,6 @@ export class AuthController {
     return this.authService.create(createUserDto);
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiBody({ type: LoginUserDto })
   @ApiResponse({
